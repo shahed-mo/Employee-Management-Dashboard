@@ -1,0 +1,552 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Risque&display=swap');
+
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: Poppins, sans-serif;
+    font-weight: 300;
+    line-height: 100%;
+    letter-spacing: 0% !important;
+}
+.Dashboard-container{
+    padding: 2.5rem;
+}
+.header{
+    margin-bottom: 1.5rem;
+}
+.header h2 {
+    font-weight: 600;
+    line-height: 1.2;
+    font-size: 1.875rem;
+
+    background: linear-gradient(
+        to right,
+        oklch(27.9% .041 260.031),
+        oklch(44.6% .043 257.281)
+    );
+
+    -webkit-background-clip: text;
+    background-clip: text;
+
+    -webkit-text-fill-color: transparent;
+}
+.header p{
+    color: #717182;
+    font-weight: 400;
+}
+.grid{
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1rem;
+    margin-block-end:2rem;
+}
+.CardDetails{
+    background-color: #FFFFFF;
+    border-radius: 1rem;
+    color: black;
+    padding: 1rem;
+    transition: all 0.3s ease-in;
+}
+.CardDetails:hover{
+    transform: translateY(-4px);
+}
+.pt-6
+ {
+    padding-top:1rem;
+}
+.card_header{
+    padding-bottom: 0.5rem;
+    padding-inline: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.card_titile{
+    font-weight: 500;
+    font-size: .875rem;
+    line-height: calc(1.25/.875);
+    color: #717182;
+    margin-bottom: 0;
+}
+.card_header .icon{
+     background: linear-gradient(to right, #012769, #0072CE); 
+    padding: 9px;
+    border-radius: 8px;
+    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 
+                0 4px 6px -4px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    fill: #FFFFFF;
+    color: #fff;
+    transition: all 0.5s ease-in;
+}
+.card_header .icon:hover{
+    transform: rotate(360deg);
+}
+.card_header .icon svg:not(:last-child){
+    fill: #FFFFFF;
+}
+.card_content .num {
+     background: linear-gradient(
+        to right,
+        oklch(27.9% .041 260.031),
+        oklch(44.6% .043 257.281)
+    );
+
+    -webkit-background-clip: text;
+    background-clip: text;
+
+    -webkit-text-fill-color: transparent;
+    font-weight: 700;
+    font-size: 1.875rem;
+    line-height: 1.2;
+    padding-bottom: 0.5rem;
+    padding-inline: 0.5rem;
+}
+.card_content p{
+    color: #717182;
+    line-height: calc(1/.75);
+    font-size: .75rem;
+}
+.more-employee{
+    border-top: 1px solid oklch(93% .034 272.788);
+    display: flex;
+    align-items: center;
+    padding-top: 0.75rem;
+    margin-top: 0.75rem;
+}
+.more-employee span{
+     color: #717182;
+    line-height: calc(1/.75);
+    font-size: .75rem;
+}
+.more-employee .present{
+    color: oklch(52.7% .154 150.069);
+    font-weight: 600;
+    font-size: 0.75rem;
+    line-height: calc(1/.75);
+    padding-block:0.25rem ;
+    background-color: oklch(96.2% .044 156.743);
+    border-radius: 3.40282e38px;
+    padding-inline: 0.5rem;
+    margin-right: 0.5rem;
+}
+.chartjs-legend ul {
+  display: flex !important;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.chartjs-legend li {
+  width: 50%; /* كل عنصرين في الصف */
+}
+.card{
+     background-color: #FFFFFF;
+    border-radius: 1rem;
+    color: black;
+    transition: all 0.3s ease-in;
+}
+.card .card_header{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.5rem;
+}
+.card .card_header h4 ,.card .card_header .icon{
+    line-height: calc(1.75/1.125);
+    font-size: 1.2rem;
+}
+.card .card_header svg{
+    color: oklch(58.5% .233 277.117);
+    vertical-align:baseline;
+    font-size: 1.2rem;
+}
+.card .card_header{
+    padding-top: 1.5rem;
+    padding-inline: 1.5rem;
+}
+.col3{
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.col2{
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.department {
+  padding: 1.5rem;
+}
+
+.title {
+  margin-bottom: 20px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.row {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.badge {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: bold;
+}
+
+.info {
+  flex: 1;
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.name {
+  font-weight: 500;
+}
+
+.percent {
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.progress {
+  width: 100%;
+  height: 6px;
+  background: #e5e7eb;
+  border-radius: 10px;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 10px;
+}
+
+/* 🎨 Colors */
+.color-0 { background: #6366f1; }
+.color-1 { background: #8b5cf6; }
+.color-2 { background: #ec4899; }
+.color-3 { background: #f59e0b; }
+.color-4 { background: #10b981; }
+.color-5 { background: #3210b9; }
+
+.hire{
+    padding-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+     padding: 2rem;
+}
+.data{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-bottom: 2rem;
+    gap:10px;
+    position: relative;
+    
+}
+.data .name{
+    font-size: .875rem;
+    font-weight: 500;
+    line-height: calc(1.25/.875);
+}
+.data small{
+    color: #717182;
+    font-size: .75rem;
+    line-height: calc(1/.75);
+}
+.time{
+    position: absolute;
+    right: 0;
+    color: #717182;
+    font-size: .75rem;
+    line-height: calc(1/.75);
+}
+.employee-dashboard {
+  padding: 30px;
+  background: linear-gradient(135deg, #eef2ff, #f8fafc);
+  min-height: 100vh;
+}
+
+/* 🔹 Header */
+.employee-header {
+  margin-bottom: 30px;
+}
+
+.employee-header h2 {
+  font-size: 28px;
+  color: #1e293b;
+}
+
+.employee-header span {
+  color: #6366f1;
+}
+
+/* 🔹 Grid Layout */
+.employee-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 20px;
+}
+
+/* 🔹 Main Card */
+.employee-card {
+  background: #fff;
+  padding: 25px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  transition: 0.3s;
+}
+
+.employee-card:hover {
+  transform: translateY(-6px);
+}
+
+/* 🔹 Info rows */
+.dahsh .employee-info {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.employee-info:last-child {
+  border-bottom: none;
+}
+
+.employee-info span {
+  color: #64748b;
+}
+
+.employee-info strong {
+  color: #0f172a;
+}
+
+/* 🔹 Status */
+.status-active {
+  color: #16a34a !important;
+  font-weight: 500;
+}
+.status-leave {
+  color: #f59e0b !important;
+  font-weight: 500;
+}
+
+/* 🔹 Side Stats */
+.employee-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.stat-box {
+  background: #fff;
+  padding: 20px;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+  transition: 0.3s;
+}
+
+.stat-box:hover {
+  transform: scale(1.05);
+}
+
+.stat-box h3 {
+  font-size: 22px;
+  color: #6366f1;
+}
+
+.stat-box p {
+  color: #64748b;
+  font-size: 14px;
+}
+/* =========================
+   Tablets & small laptops (≤992px)
+========================= */
+@media (max-width: 992px) {
+     .lineChart{
+        width: 100% !important;
+    }
+    .grid{
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+   }
+   .col3,.col2{
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+   }
+    .header h2 {
+        font-size: 1.5rem; /* تقليل العنوان الرئيسي */
+    }
+
+    .header p {
+        font-size: 0.7rem;
+    }
+
+    .card_header h4, .card_header .icon {
+        font-size: 1rem;
+    }
+
+    .card_content .num {
+        font-size: 1.5rem;
+    }
+
+    .card_content p, .card_titile {
+        font-size: 0.7rem;
+    }
+
+    .more-employee span, .more-employee .present {
+        font-size: 0.65rem;
+    }
+
+    .data .name {
+        font-size: 1rem;
+    }
+
+    .data small, .time, .percent {
+        font-size: 0.7rem;
+    }
+
+}
+
+/* =========================
+   Tablets & small phones (≤768px)
+========================= */
+@media (max-width: 768px) {
+    .header h2 {
+        font-size: 1.25rem;
+    }
+
+    .header p {
+        font-size: 0.65rem;
+    }
+
+    .card_header h4, .card_header .icon {
+        font-size: 0.9rem;
+    }
+
+    .card_content .num {
+        font-size: 1.25rem;
+    }
+
+    .card_content p, .card_titile {
+        font-size: 0.65rem;
+    }
+
+    .more-employee span, .more-employee .present {
+        font-size: 0.6rem;
+    }
+
+    .data .name {
+        font-size: 0.7rem;
+    }
+
+    .data small, .time, .percent {
+        font-size: 0.6rem;
+    }
+    .employee-grid{
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+    }
+    .employee-info strong {
+    color: #0f172a;
+    font-size: 0.875rem;
+}
+.itemsCenter > div {
+        width: 100%;
+        flex-direction: column;
+    }
+    .total .paid {
+    width: 70px;
+}
+}
+
+/* =========================
+   Small phones (≤480px)
+========================= */
+@media (max-width: 540px) {
+    .header h2 {
+        font-size: 1.1rem;
+    }
+
+    .header p {
+        font-size: 0.6rem;
+    }
+
+    .card_header h4, .card_header .icon {
+        font-size: 0.85rem;
+    }
+
+    .card_content .num {
+        font-size: 1rem;
+    }
+
+    .card_content p, .card_titile {
+        font-size: 0.6rem;
+    }
+
+    .more-employee span, .more-employee .present {
+        font-size: 0.55rem;
+    }
+
+    .data .name {
+        font-size: 0.65rem;
+    }
+
+    .data small, .time, .percent {
+        font-size: 0.55rem;
+    }
+     .grid{
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+   }
+   .col3,.col2{
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+   }
+}
+
+/* =========================
+   Very small phones (≤350px)
+========================= */
+@media (max-width: 350px) {
+    .header h2 {
+        font-size: 1rem;
+    }
+
+    .header p {
+        font-size: 0.55rem;
+    }
+
+    .card_header h4, .card_header .icon {
+        font-size: 0.8rem;
+    }
+
+    .card_content .num {
+        font-size: 0.9rem;
+    }
+
+    .card_content p, .card_titile {
+        font-size: 0.55rem;
+    }
+
+    .more-employee span, .more-employee .present {
+        font-size: 0.5rem;
+    }
+
+    .data .name {
+        font-size: 0.6rem;
+    }
+
+    .data small, .time, .percent {
+        font-size: 0.5rem;
+    }
+    .lineChart{
+        width: 100% !important;
+    }
+}

@@ -1,0 +1,245 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Risque&display=swap');
+
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: Poppins, sans-serif;
+    font-weight: 300;
+    line-height: 100%;
+    letter-spacing: 0% !important;
+    
+}
+nav{
+     padding: 1.25rem; 
+
+
+}
+.containerLogo {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid oklch(93% .034 272.788);
+    width: 100%;
+    padding: 1.75rem; 
+    margin-bottom: 10px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    Width: 100%;
+}
+.logoIcon {
+    background: linear-gradient(to right, #012769, #0072CE); 
+    padding: 9px;
+    border-radius: 8px;
+    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 
+                0 4px 6px -4px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.to-purple-600 {
+    background: linear-gradient(to right, #037de0, #0485ee);
+    -webkit-text-fill-color: transparent; 
+    font-weight: bold;
+}
+.text h1{
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #037de0;
+    line-height: calc(1.75/1.25);
+    margin-bottom: 0;
+}
+.text p{
+    font-size: 0.75rem;
+    color: #FFFFFF;
+}
+p {
+    margin-top: 0;
+    margin-bottom: 0rem;
+}
+.nav-link {
+    display: flex;
+    align-items: center;
+    padding: 10px 12px;
+    color: #BFC9DA;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: 0.3s;
+    transition: all 0.3s ease-in;
+    margin-bottom: 16px;
+}
+.nav-link span{
+font-weight: 500;
+}
+
+.nav-link:hover
+{
+    background-color: rgba(255,255,255,0.05);
+    color: #5A6ACF !important;
+
+}
+
+.nav-link.active {
+    background-color: rgba(112, 127, 221, 0.15); 
+    color: #5A6ACF !important;
+}
+.nav-link.active span,.nav-link.active .icon
+{
+    color: #5A6ACF;
+    fill:#5A6ACF;
+}
+.nav-link:hover {
+    background-color: rgba(255,255,255,0.05);
+}
+
+.nav-link:hover span {
+    color: #5A6ACF;
+}
+.nav-link:hover .icon{
+    color: #5A6ACF;
+    fill: #5A6ACF;
+}
+aside {
+  width: 250px;
+  transition: all 0.3s ease;
+  background: #001F54;
+  color: white;
+  position: relative;
+}
+
+/* Sidebar collapsed (optional) */
+aside.collapsed {
+  width: 70px;
+}
+
+aside.collapsed .text {
+  display: none;
+}
+
+aside.collapsed .logoIcon {
+  margin: 0 auto;
+}
+
+/* Hamburger button */
+.hamburger {
+  display: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  font-size: 1.5rem;
+  color: #012769;
+  position: absolute;
+  top: 18px;
+  left: 0px;
+  z-index: 100;
+}
+
+/* Close button */
+.close-btn {
+  display: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  font-size: 1.5rem;
+  color: white;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+/* Responsive styles */
+@media (max-width: 992px) {
+  aside {
+    position: fixed;
+    left: -250px;
+    top: 0;
+    min-height: 100%;
+    width: 250px;
+    z-index: 200;
+    transition: left 0.3s ease;
+  }
+
+  aside.open {
+    left: 0;
+  }
+
+  main {
+    margin-left: 0; /* أهم حاجة هنا */
+  }
+
+  .overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0,0,0,0.4);
+    z-index: 150;
+  }
+
+  .overlay.show {
+    display: block;
+  }
+  .hamburger {
+    display: block;
+  }
+  .close-btn {
+    display: block;
+  }
+  .search-wrapper{
+    width: auto;
+  }
+}
+.count{
+    background: #5A6ACF;
+    color: #fff !important;
+    border-radius: 10%;
+    width: 20px;
+    height: 20px;
+    font-size: 15px;
+    text-align: center;
+    padding: 5px 10px;
+    position: relative;
+    right:-20%;
+
+}
+.logout{
+  border-top: 1px solid #fff;
+  position: relative;
+}
+.logout .profile{
+  padding: 2rem 1rem;
+  position: relative;
+}
+.logout .flex .profile{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+.logout .profile .name{
+  font-size: .875rem;
+  font-weight: 500;
+  color: #fff;
+
+}
+.logout .profile .email{
+  font-size: .7rem;
+  color: #c8c8d9;
+}
+.logout .flex .logoutIcon{
+  position: absolute;
+  top: 45%;
+  right: 10%;
+  transform: translateY(-50%);
+  color: #fff;
+}
+.logout .icon{
+  transition: all 0.3s ease-in;
+}
+.logout .icon:hover{
+  transform: scale(1.2);
+  cursor: pointer;
+  color: #5A6ACF;
+}

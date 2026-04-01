@@ -1,0 +1,98 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "Username": "Mohamed",
+      "email": "mohamed_123@gmail.com",
+      "password": "mohamed123#",
+      "role": "admin"
+    },
+    {
+      "id": "2",
+      "Username": "Sara",
+      "email": "test@test.com",
+      "password": "Ali#",
+      "role": "admin"
+    },
+    {
+      "id": "3",
+      "Username": "Ali",
+      "email": "fuygug7g7g@gmail.com",
+      "password": "mkn kn jmn jn"
+    },
+    {
+      "id": "62d0",
+      "Username": "di",
+      "email": "knxjnc@gmail.com",
+      "password": "kmbk jgbgb "
+    },
+    {
+      "id": "24bc",
+      "Username": "shahd_mo",
+      "email": "shahd_mohamed@gmail.com",
+      "password": "kmbk jgbgb "
+    },
+    {
+      "id": "c2a2",
+      "Username": "Shahd",
+      "email": "dhhhhvvbjjjj@gmail.com",
+      "password": "123456"
+    },
+    {
+      "id": "9352",
+      "Username": "shahd",
+      "email": "shahd_mohamed@gmail.com",
+      "password": "shahed1234@"
+    },
+    {
+      "id": "0e16",
+      "Username": "fuygug7g7g@gmail.com",
+      "email": "fuygug7g7g@gmail.com",
+      "password": "mkn kn jmn jn "
+    }
+  ],
+  "friends": [
+    {
+      "id": "1",
+      "name": "shimaa"
+    },
+    {
+      "id": "2",
+      "name": "mohamed"
+    },
+    {
+      "id": "3",
+      "name": "sara"
+    },
+    {
+      "id": "4",
+      "name": "ali"
+    },
+    {
+      "id": "5",
+      "name": "shahed"
+    },
+    {
+      "id": "6",
+      "name": "mohamed"
+    }
+  ],
+  "posts": [
+    {
+      "id": "1",
+      "title": "Post 1",
+      "userId": 2
+    },
+    {
+      "id": "2",
+      "title": "Post 2",
+      "userId": 1
+    },
+    {
+      "id": "3",
+      "title": "Post 3",
+      "userId": 2
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}

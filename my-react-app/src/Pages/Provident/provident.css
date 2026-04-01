@@ -1,0 +1,48 @@
+
+.card.total .money{
+    color: oklch(45.7% .24 277.023);
+}
+.color .card.blue{
+    background-color: color-mix(in oklab,rgb(242, 207, 207) 20%, transparent) !important;
+    border-color: oklch(86.227% 0.07153 307.058);
+}
+.color .card.blue .money{
+    color: oklch(49.6% .265 301.924) !important;
+}
+.color .card.blue .moretext{
+    color: #717182;
+}
+.color .card.blue .icon {
+    background-color: 
+color-mix(in oklab, oklch(62.7% .265 303.9) 20%, transparent);
+    color: oklch(55.8% .288 302.321);
+}
+.BasicSalary span{
+    font-weight: 500;
+}
+.employeeContribution span{
+    color: oklch(51.1% .262 276.966);
+    font-weight: 500;
+}
+.employerContribution span{
+    color: oklch(55.8% .288 302.321);
+    font-weight: 500;
+}
+.t{
+    color: oklch(62.7% .194 149.214);
+    font-weight: 600;
+}
+.total .paid {
+    background-color: oklch(95.729% 0.04754 154.775);
+    color: oklch(52.7% .154 150.069);
+    padding-inline: 0.5rem;
+    border-radius: 10px;
+    font-size: .75rem;
+    line-height: calc(1 / .75);
+    font-weight: 500;
+}
+.policy {
+    margin-top: 20px;
+    background-color: #f2f2fc;
+    border: 1px solid #c6c6f7 !important;
+}

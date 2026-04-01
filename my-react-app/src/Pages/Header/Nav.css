@@ -1,0 +1,103 @@
+/* Nav.css */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Risque&display=swap');
+
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: Poppins, sans-serif;
+    font-weight: 300;
+    line-height: 100%;
+    letter-spacing: 0% !important;
+    
+}
+
+
+.navbar {
+  padding: 10px 20px;
+  box-shadow: 0px 4px 4px 0px #00000040;
+  height: 80px;
+
+}
+
+.navbar .container-fluid {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+}
+
+.search-wrapper {
+  position: relative;
+  width: 625px;
+}
+
+.search-wrapper .form-control {
+  width: 100%;
+  height: 32px;
+  padding: 0 40px 0 20px;
+  border-radius: 5px;
+  background-color: #F6F6FB;
+}
+
+.search-wrapper .search-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 18px;
+  z-index: 10;
+}
+
+.search-wrapper svg path {
+  color: #627B87 !important;
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.profile img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.profile .username {
+  font-size: 12px;
+  font-weight: 400;
+  color: #000;
+  line-height: 13px;
+  letter-spacing: 0.5px;
+}
+
+.notifyicon {
+  width: 18px;
+  margin-left: 10px;
+}
+
+.notifyicon svg path {
+  color: #B0C3CC;
+}
+.main-content {
+    background-color: #fff;
+}
+.inital{
+ background: linear-gradient(to right, #012769, #0072CE); 
+    padding: 9px;
+    border-radius: 50%;
+    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 
+                0 4px 6px -4px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    fill: #FFFFFF;
+    color: #fff;
+    transition: all 0.5s ease-in;
+    width: 40px;
+    height: 40px;
+}

@@ -1,0 +1,143 @@
+.card.green {
+  background-color: color-mix(in oklab, oklch(95.87% 0.03786 165.046) 20%, transparent);
+  border-color: #b7ebc6;
+}
+
+.card.blue {
+    background-color: color-mix(in oklab,rgb(155, 170, 250) 20%, transparent);
+    border-color: rgb(155, 170, 250);
+}
+
+.card.red {
+  background-color: color-mix(in oklab,#f9c4c4 20%, transparent);
+}
+
+.amount {
+    font-size: 1.4rem;
+    font-weight: bold;
+}
+
+.desc {
+    font-size: 0.8rem;
+    color: gray;
+}
+.card {
+    border-radius: 16px;
+    transition: all 0.3s ease;
+}
+ .leave .card .card-content {
+    padding: 1.5rem;
+    padding-inline: 1.5rem;
+    color: #111;
+}
+.texth{
+    color: #717182;
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+    line-height: calc(1.25/.875);
+}
+.money{
+    font-size: 1.875rem;
+    font-weight: 700;
+    line-height: 1.2;
+}
+.card.green .money{
+     color: oklch(52.7% .154 150.069);
+}
+.card.red .money{
+     color: oklch(50.5% .213 27.518);
+}
+.card.blue .money{
+     color: oklch(48.8% .243 264.376);
+}
+.moretext{
+    color: #717182;
+    line-height: calc(1/.75);
+    font-size: 0.75rem;
+}
+.card-content .flex{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.card.green .icon{
+   background-color:color-mix(in oklab,oklch(72.3% .219 149.579) 20%,transparent);
+   color: oklch(62.7% .194 149.214);
+}
+.card.blue .icon{
+    background-color: color-mix(in oklab,oklch(62.3% .214 259.815)20%,transparent);
+    color:oklch(54.6% .245 262.881);
+}
+.card.red .icon{
+    background-color: color-mix(in oklab,oklch(63.7% .237 25.331) 20%, transparent);
+    color: oklch(57.7% .245 27.325);
+}
+.card.red .moretext{
+    color: oklch(50.5% .213 27.518);
+}
+.card.blue .moretext{
+    color: oklch(48.8% .243 264.376);
+}
+.basic span{
+    font-weight: 500;
+}
+.allowance span{
+    color: oklch(62.7% .194 149.214);
+}
+.pf span{
+    color: oklch(57.7% .245 27.325);
+}
+.tax span{
+    color: oklch(57.7% .245 27.325);
+}
+.netSalary span{
+    color: oklch(52.7% .154 150.069);
+    font-weight: 700;
+    font-size: 1.125rem;
+    line-height: calc(1.75/1.125);
+}
+.status.paid span{
+   background-color: oklch(98.2% .018 155.826);
+   color: oklch(52.7% .154 150.069);
+   border: 1px solid oklch(92.5% .084 155.995);
+}
+ .v {
+    padding: 2px 5px;
+    gap:3px;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+.fund .card-header h4{
+    font-weight: 600;
+    font-size: 1.02rem;
+    line-height: calc(1.75/1.125);
+    display: flex;
+    align-items: center;
+}
+
+.fund .f{
+    background-color: #fff;
+    margin-bottom: 10px;
+    border: 1px solid #d4d4f2;
+    border-radius: 5px;
+    padding: 0.3rem;
+}
+.s1{
+    color: #717182;
+    line-height: calc(1.25/.875);
+    font-size: 0.8rem;
+}
+.s2{
+    font-size: .875rem;
+    font-weight: 500;
+    line-height: calc(1.75/.875);
+    color: #111;
+}
+
+@media (max-width: 768px) {
+  .actions .v{
+    justify-content: center;
+    width: 20%; 
+  }
+}

@@ -1,0 +1,124 @@
+.card.present {
+  background: #eafaf1;
+  border-color: #b7ebc6;
+}
+.card.present .num {
+  color: #16a34a;
+}
+
+.card.absent {
+  background: #fdecec;
+  border-color: #f9c4c4;
+}
+.card.absent .num {
+  color: #dc2626;
+}
+
+.card.halfday {
+  background: #fef6e7;
+  border-color: #f4dfb8;
+}
+.card.halfday .num {
+  color: #d97706;
+}
+
+.card.total {
+  background: #eef2ff;
+  border-color: #c7d2fe;
+}
+.card.total .num {
+  color: #4f46e5;
+}
+
+.card.present .icon{
+  background-color: color-mix(in oklab, oklch(0.7 0.2 149.9) 20%, transparent);
+  border-color: #b7ebc6;
+  color: oklch(62.7% .194 149.214);
+}
+.card.card.absent .icon{
+  background-color: color-mix(in oklab,oklch(63.7% .237 25.331) 20%, transparent);
+  color: oklch(57.7% .245 27.325);
+}
+.card.halfday .icon{
+  background-color: color-mix(in oklab,oklch(76.9% .188 70.08) 20%,  transparent);
+  color: oklch(66.6% .179 58.318);
+}
+.card.total .icon{
+  background-color: color-mix(in oklab,oklch(58.5% .233 277.117) 20%, transparent);
+  color: oklch(51.1% .262 276.966);
+}
+.date span{
+    border: 1px solid #0000001a;
+    padding: 0.2rem;
+    border-radius: 10px;
+    font-size: .74rem;
+    line-height: calc(1/.75);
+    font-weight: 500;
+    color: #000;
+}
+.hours span{
+    font-weight: 500;
+}
+.status.present span{
+ background-color: color-mix(in oklab, oklch(0.7 0.2 149.9) 20%, transparent);
+  border-color: #b7ebc6;
+  color: oklch(62.7% .194 149.214);
+}
+.status.half-day span{
+  background-color: color-mix(in oklab,oklch(76.9% .188 70.08) 20%,  transparent);
+  color: oklch(66.6% .179 58.318);
+}
+
+.status.absent span{
+  background-color: color-mix(in oklab,oklch(78.718% 0.10226 31.382) 20%,  transparent);
+  color: oklch(59.957% 0.23295 28.466);
+}
+.policy{
+    margin-top: 20px;
+    background-color: #f5f5fb;
+    border: 1px solid #d4d4f2 ;
+    padding: 0.5rem;
+    border-radius: 10px;
+
+}
+.policy h4{
+    font-weight: 400;
+    font-size: 1.125rem;
+    line-height: calc(1.75/1.125);
+}
+.policy .card-content{
+    padding-top: 15px !important;
+}
+
+.policy p{
+    color:#717182;
+    font-size: 0.875rem;
+    line-height: calc(1.75/.875);
+}
+.policy .card-content{
+    display: flex;
+    align-items: flex-start;
+    gap: 5px;
+    flex-direction: column;
+}
+.policy .flex{
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+.policy .card-content .flex .circle{
+    border-radius: 50%;
+    width: 7px;
+    height: 7px;
+}
+.policy .card-content .flex:nth-child(1) .circle {
+    background-color: #16a34a;
+}
+
+.policy .card-content .flex:nth-child(2) .circle {
+    background-color: #f59e0b;
+}
+
+.policy .card-content .flex:nth-child(3) .circle {
+    background-color: #4f46e5;
+}
