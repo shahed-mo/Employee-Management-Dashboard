@@ -19,7 +19,7 @@ HTTP Requests: Axios with interceptors
 Other Libraries: react-icons, react-query, react-toastify (optional for notifications)
 ⚡ Installation
 Clone the repository:
-git clone https://github.com/username/employee-management.git
+git clone https://github.com/shahed-mo/Employee-Management-Dashboard.git
 cd employee-management
 Install dependencies:
 npm install
