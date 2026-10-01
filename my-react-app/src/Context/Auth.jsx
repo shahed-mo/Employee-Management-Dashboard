@@ -1,87 +1,139 @@
-import { createContext, useContext, useEffect, useState } from "react";
-import axiosInstance from "../Pages/Axios/AxiosInterciptor";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
+import {
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signOut,
+} from "firebase/auth";
+import { doc, getDoc, collection, writeBatch } from "firebase/firestore";
+import { auth, db } from "../../firebase"; // عدّل المسار حسب مكان الملف
 
 export const AutContext = createContext();
 
-export const Authprovider = ({ children }) => {
-  const [User, setUser] = useState(() => {
-    try {
-      const loggedUser = localStorage.getItem("userData");
-      return loggedUser ? JSON.parse(loggedUser) : null;
-    } catch {
-      return null;
-    }
-  });
-
-  // ✅ loading state (مهم جدًا)
-  const [loading, setLoading] = useState(true);
-
-  // 🔄 استرجاع بعد الريفريش
-  useEffect(() => {
-    try {
-      const loggedUser = localStorage.getItem("userData");
-      if (loggedUser) {
-        setUser(JSON.parse(loggedUser));
-      }
-    } catch {
-      localStorage.removeItem("userData");
-    } finally {
-      setLoading(false); // 🔥 يمنع المشكلة
-    }
-  }, []);
-
-  // 📝 Register
-const register = async (user) => {
-  try {
-    const res = await axiosInstance.get(`/employees?email=${user.email}`);
-
-    if (res.data.length > 0) {
-      return { success: false, message: "Email already exists" };
-    }
-
-    // ✅ إضافة ID عشوائي
-    const newUserData = {
-      ...user,
-      id: Math.random().toString(16).slice(2)
-    };
-
-    const newUser = await axiosInstance.post("/employees", newUserData);
-
-    setUser(newUser.data);
-    localStorage.setItem("userData", JSON.stringify(newUser.data));
-
-    return { success: true, user: newUser.data };
-  } catch {
-    return { success: false, message: "Server error" };
+// رسائل خطأ مفهومة
+const authMessage = (code) => {
+  switch (code) {
+    case "auth/invalid-credential":
+    case "auth/wrong-password":
+    case "auth/user-not-found":
+    case "auth/invalid-email":
+      return "Invalid email or password";
+    case "auth/email-already-in-use":
+      return "Email already exists";
+    case "auth/weak-password":
+      return "Password must be at least 6 characters";
+    case "auth/too-many-requests":
+      return "Too many attempts, try again later";
+    case "auth/network-request-failed":
+      return "Network error";
+    default:
+      return "Server error";
   }
 };
-  // 🔐 Login
-  const login = async (user) => {
-    try {
-      const res = await axiosInstance.get(
-        `/employees?email=${user.email.trim()}&password=${user.password.trim()}`
-      );
 
-      if (res.data.length === 0) {
-        return { success: false, message: "Invalid email or password" };
+// يجيب الـ role من users/{uid} وبيانات الموظف من employees/{employeeId}
+async function loadProfile(firebaseUser) {
+  const userSnap = await getDoc(doc(db, "users", firebaseUser.uid));
+  if (!userSnap.exists()) return null;
+
+  const { role, employeeId } = userSnap.data();
+  const empSnap = await getDoc(doc(db, "employees", String(employeeId)));
+  const emp = empSnap.exists() ? empSnap.data() : {};
+
+  return {
+    ...emp,
+    id: String(employeeId),
+    employeeId: String(employeeId),
+    uid: firebaseUser.uid,
+    email: firebaseUser.email,
+    role,
+  };
+}
+
+export const Authprovider = ({ children }) => {
+  const [User, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const registering = useRef(false); // يمنع السباق أثناء التسجيل
+
+  // 🔄 الجلسة بتفضل بعد الريفريش عن طريق Firebase نفسه
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, async (fbUser) => {
+      if (registering.current) return; // register هو اللي هيظبط الـ User
+      try {
+        if (!fbUser) {
+          setUser(null);
+        } else {
+          const profile = await loadProfile(fbUser);
+          if (profile) {
+            setUser(profile);
+          } else {
+            await signOut(auth);
+            setUser(null);
+          }
+        }
+      } catch (e) {
+        console.error(e);
+        setUser(null);
+      } finally {
+        setLoading(false);
       }
+    });
+    return unsub;
+  }, []);
 
-      const loggedUser = res.data[0];
+  // 📝 Register (دايمًا role = employee)
+  const register = async (userInput) => {
+    const { password, role, id, ...rest } = userInput; // نتجاهل أي role جاي من الفورم
+    const email = userInput.email.trim().toLowerCase();
+    registering.current = true;
 
-      setUser(loggedUser);
-      localStorage.setItem("userData", JSON.stringify(loggedUser));
+    try {
+      const cred = await createUserWithEmailAndPassword(auth, email, password);
+      const uid = cred.user.uid;
+      const employeeId = doc(collection(db, "employees")).id;
 
-      return { success: true, user: loggedUser };
+      const batch = writeBatch(db);
+      batch.set(doc(db, "users", uid), { email, role: "employee", employeeId });
+      batch.set(doc(db, "employees", employeeId), { ...rest, email, authUid: uid });
+      await batch.commit();
+
+      const profile = await loadProfile(cred.user);
+      setUser(profile);
+      return { success: true, user: profile };
     } catch (error) {
-      console.log(error);
-      return { success: false, message: "Server error" };
+      console.error(error);
+      return { success: false, message: authMessage(error.code) };
+    } finally {
+      registering.current = false;
+      setLoading(false);
+    }
+  };
+
+  // 🔐 Login
+  const login = async ({ email, password }) => {
+    try {
+      const cred = await signInWithEmailAndPassword(
+        auth,
+        email.trim().toLowerCase(),
+        password.trim()
+      );
+      const profile = await loadProfile(cred.user);
+      if (!profile) {
+        await signOut(auth);
+        return { success: false, message: "Account has no profile" };
+      }
+      setUser(profile);
+      return { success: true, user: profile };
+    } catch (error) {
+      console.error(error);
+      return { success: false, message: authMessage(error.code) };
     }
   };
 
   // 🚪 Logout
-  const logout = () => {
+  const logout = async () => {
+    await signOut(auth);
     setUser(null);
-    localStorage.removeItem("userData");
   };
 
   return (
@@ -91,5 +143,4 @@ const register = async (user) => {
   );
 };
 
-// ✅ Custom Hook (زي ما هو)
 export const Auth = () => useContext(AutContext);

@@ -1,41 +1,73 @@
-import React,{lazy,Suspense} from 'react';
+import React, { lazy, Suspense } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Routes, Route } from 'react-router-dom';
-import Sidebar from './Pages/Sidebar/Sidebar';
-import Dashboard from './Pages/Dashboard/Dashboard'; 
-import RequireLogin from './Components/RequireLogin';
-import AuthPage from './Pages/AuthPage/AuthPage';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import {ReactQueryDevtools} from '@tanstack/react-query-devtools';
-import Leave from './Pages/Leave/Leave';
-import Attendance from './Pages/Attendance/Attendance';
-import Payroll from './Pages/Payroll/Payroll';
-import Provident from './Pages/Provident/Provident';
-import Setting from './Pages/setting/Setting';
-import RequireRole from './Components/RequireRole ';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import Sidebar from './Pages/Sidebar/Sidebar';
+import RequireLogin from './Components/RequireLogin';
+import RequireRole from './Components/RequireRole';
+import AuthPage from './Pages/AuthPage/AuthPage';
+import './Components/spinner.css';
 
+const Dashboard = lazy(() => import('./Pages/Dashboard/Dashboard'));
 const Employeen = lazy(() => import('./Pages/Employee/Employee'));
+const Leave = lazy(() => import('./Pages/Leave/Leave'));
+const Attendance = lazy(() => import('./Pages/Attendance/Attendance'));
+const Payroll = lazy(() => import('./Pages/Payroll/Payroll'));
+const Provident = lazy(() => import('./Pages/Provident/Provident'));
+const Setting = lazy(() => import('./Pages/setting/Setting'));
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000,
+      gcTime: 30 * 60 * 1000,
+      refetchOnWindowFocus: false,
+      retry: 1,
+    },
+  },
+});
+
+const PageLoader = () => (
+  <div className="spinner-wrapper" style={{ height: '60vh' }}>
+    <div className="spinner" role="status" aria-label="Loading"></div>
+  </div>
+);
+
 const App = () => {
   return (
-  <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={queryClient}>
       <Routes>
-      <Route path='/' element={<Sidebar />}>
-        <Route path='dashboard' element={<RequireLogin><Dashboard/></RequireLogin>} /> 
-        <Route path='employee' element={<RequireLogin><RequireRole role={'hr'}><Suspense fallback={null}><Employeen/></Suspense></RequireRole></RequireLogin>} /> 
-        <Route path='leave' element={<RequireLogin><Leave/></RequireLogin>} />
-        <Route path='attendance' element={<RequireLogin><Attendance/></RequireLogin>} />
-        <Route path='payroll' element={<RequireLogin><Payroll/></RequireLogin>} />
-        <Route path='provident' element={<RequireLogin><Provident/></RequireLogin>} />
-        <Route path='setting' element={<Setting/>} />
-      </Route>
-      <Route path="/auth" element={<AuthPage/>}/>
-    </Routes>
-        <ReactQueryDevtools initialIsOpen={false}/>
-
-  </QueryClientProvider>
-    
+        <Route
+          path="/"
+          element={
+            <RequireLogin>
+              <Sidebar />
+            </RequireLogin>
+          }
+        >
+          <Route index element={<Navigate to="/dashboard" replace />} />
+          <Route path="dashboard" element={<Suspense fallback={<PageLoader />}><Dashboard /></Suspense>} />
+          <Route
+            path="employee"
+            element={
+              <RequireRole role="admin">
+                <Suspense fallback={<PageLoader />}>
+                  <Employeen />
+                </Suspense>
+              </RequireRole>
+            }
+          />
+          <Route path="leave" element={<Suspense fallback={<PageLoader />}><Leave /></Suspense>} />
+          <Route path="attendance" element={<Suspense fallback={<PageLoader />}><Attendance /></Suspense>} />
+          <Route path="payroll" element={<Suspense fallback={<PageLoader />}><Payroll /></Suspense>} />
+          <Route path="provident" element={<Suspense fallback={<PageLoader />}><Provident /></Suspense>} />
+          <Route path="setting" element={<Suspense fallback={<PageLoader />}><Setting /></Suspense>} />
+        </Route>
+        <Route path="/auth" element={<AuthPage />} />
+      </Routes>
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
   );
 };
 

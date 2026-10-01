@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -11,7 +11,9 @@ import {
   Filler
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import employeesData from '../../../Employee.json';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '../../../firebase';
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -23,25 +25,47 @@ ChartJS.register(
   Filler
 );
 
+const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+
 const LineChart = () => {
-  const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
-  const lastYear = Math.max(...employeesData.employees.map(emp=>new Date(emp.startDate).getFullYear()))
-  const hiriDate = labels.map((_,index)=>{
-    return employeesData.employees.filter(emp => {
-        if (!emp.startDate) return false;
-        const date = new Date(emp.startDate);
-        return (
-            date.getFullYear()===lastYear&&date.getMonth()===index
-        )
-    }).length
-  })
+  const [employees, setEmployees] = useState([]);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const snap = await getDocs(collection(db, 'employees'));
+        if (!cancelled) setEmployees(snap.docs.map((d) => d.data()));
+      } catch (e) {
+        console.error(e);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const hiringData = useMemo(() => {
+    const dates = employees
+      .filter((emp) => emp.startDate)
+      .map((emp) => new Date(emp.startDate))
+      .filter((d) => !isNaN(d));
+
+    if (dates.length === 0) return labels.map(() => 0);
+
+    const lastYear = Math.max(...dates.map((d) => d.getFullYear()));
+    return labels.map(
+      (_, index) =>
+        dates.filter((d) => d.getFullYear() === lastYear && d.getMonth() === index).length
+    );
+  }, [employees]);
 
   const data = {
     labels,
     datasets: [
       {
         label: 'Hiring',
-        data: hiriDate,
+        data: hiringData,
         borderColor: 'rgb(99, 102, 241)',
         backgroundColor: 'rgba(99, 102, 241, 0.15)',
         tension: 0.4,
@@ -56,19 +80,11 @@ const LineChart = () => {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
-      legend: {
-        display: false,
-      },
+      legend: { display: false },
       title: {
         display: true,
-        font: {
-          size: 20,
-          weight: 'bold',
-        },
-        padding: {
-          top: 10,
-          bottom: 20,
-        },
+        font: { size: 20, weight: 'bold' },
+        padding: { top: 10, bottom: 20 },
       },
       tooltip: {
         padding: 10,
@@ -77,23 +93,12 @@ const LineChart = () => {
       }
     },
     scales: {
-      x: {
-        grid: {
-          display: false,
-        },
-      },
+      x: { grid: { display: false } },
       y: {
         min: 0,
         max: 8,
-        ticks: {
-          stepSize: 2,
-          font: {
-            size: 12,
-          },
-        },
-        grid: {
-          color: '#eee',
-        },
+        ticks: { stepSize: 2, font: { size: 12 } },
+        grid: { color: '#eee' },
       },
     },
   };

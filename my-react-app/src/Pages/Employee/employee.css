@@ -90,7 +90,7 @@ table .inactive span, .on-leave span{
 
 /* Actions */
 .tabel td:last-child {
-    display: flex;
+    
     gap: 10px;
 }
 

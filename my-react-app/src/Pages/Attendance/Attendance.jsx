@@ -1,87 +1,90 @@
-import React, { useEffect, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import { db } from '../../../firebase';
 import Pageheader from '../../Components/Pageheader';
 import RequestStatus from '../Leave/RequestStatus';
-import { IoChevronDown, IoFunnelOutline, IoAlertCircleOutline, IoTimeOutline } from "react-icons/io5";
-import { HiOutlineXCircle } from "react-icons/hi2";
-import { LuCalendar } from "react-icons/lu";
-import { IoMdCheckmarkCircleOutline } from "react-icons/io";
-import axiosInstance from '../Axios/AxiosInterciptor';
+import { IoChevronDown, IoFunnelOutline, IoAlertCircleOutline, IoTimeOutline } from 'react-icons/io5';
+import { HiOutlineXCircle } from 'react-icons/hi2';
+import { LuCalendar } from 'react-icons/lu';
+import { IoMdCheckmarkCircleOutline } from 'react-icons/io';
 import '../Leave/leave.css';
 import './attendance.css';
 import { Auth } from '../../Context/Auth';
 
+const calcHours = (checkIn, checkOut) => {
+  if (!checkIn || !checkOut) return '0.0';
+  const [inH, inM] = checkIn.split(':').map(Number);
+  const [outH, outM] = checkOut.split(':').map(Number);
+  if ([inH, inM, outH, outM].some(isNaN)) return '0.0';
+  return ((outH * 60 + outM - (inH * 60 + inM)) / 60).toFixed(1);
+};
+
+const formatDate = (date) =>
+  date
+    ? new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+    : '-';
+
 const Attendance = () => {
   const { User, loading } = Auth();
+  const isAdmin = User?.role === 'admin';
+  const employeeId = User?.employeeId;
 
   const [status, setStatus] = useState('All Status');
   const [open, setOpen] = useState(false);
 
+  // الأدمن يجيب الكل، الموظف يجيب سجلاته بس (عشان الـ rules)
   const { data: attendance = [], isLoading: attendanceLoading } = useQuery({
-    queryKey: ['attendance'],
+    queryKey: ['attendance', isAdmin ? 'all' : employeeId],
+    enabled: Boolean(User),
     queryFn: async () => {
-      const res = await axiosInstance.get('/attendance');
-      return res.data;
+      const base = collection(db, 'attendance');
+      const q = isAdmin ? base : query(base, where('employeeId', '==', String(employeeId)));
+      const snap = await getDocs(q);
+      return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
     },
   });
 
   const { data: employees = [], isLoading: employeesLoading } = useQuery({
     queryKey: ['employees'],
+    enabled: Boolean(User),
     queryFn: async () => {
-      const res = await axiosInstance.get('/employees');
-      return res.data;
+      const snap = await getDocs(collection(db, 'employees'));
+      return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
     },
   });
 
-  useEffect(() => {
-    console.log('USER:', User);
-  }, [User]);
+  const employeesById = useMemo(
+    () => new Map(employees.map((e) => [String(e.id), e])),
+    [employees]
+  );
 
-  const calcHours = (checkIn, checkOut) => {
-    if (!checkIn || !checkOut) return 0;
-    const [inH, inM] = checkIn.split(':').map(Number);
-    const [outH, outM] = checkOut.split(':').map(Number);
-    return ((outH * 60 + outM - (inH * 60 + inM)) / 60).toFixed(1);
-  };
+  const filteredAttendance = useMemo(
+    () =>
+      attendance.filter(
+        (item) => status === 'All Status' || item.status?.toLowerCase() === status.toLowerCase()
+      ),
+    [attendance, status]
+  );
 
-  const formatDate = (date) => {
-    return new Date(date).toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric'
-    });
-  };
+  const counts = useMemo(
+    () =>
+      attendance.reduce(
+        (acc, curr) => {
+          const s = curr.status?.toLowerCase();
+          if (s === 'present') acc.present++;
+          if (s === 'absent') acc.absent++;
+          if (s === 'half day') acc.halfDay++;
+          acc.totalHours += Number(curr.workHours) || 0;
+          return acc;
+        },
+        { present: 0, absent: 0, halfDay: 0, totalHours: 0 }
+      ),
+    [attendance]
+  );
 
-  // ✅ حالات التحميل
-  if (loading || attendanceLoading || employeesLoading) {
-    return <p>Loading...</p>;
-  }
-
-  if (!User) {
-    return <p>User not logged in</p>;
-  }
-
-  // ✅ فلترة حسب اليوزر
-  const visibleAttendance = attendance.filter(item => {
-    if (User.role?.toLowerCase() === 'hr') return true;
-    return item.employeeId.toString() === User.id.toString();
-  });
-
-  // ✅ فلترة حسب الحالة
-  const filteredAttendance = visibleAttendance.filter(item => {
-    if (status === 'All Status') return true;
-    return item.status.toLowerCase() === status.toLowerCase();
-  });
-
-  // ✅ counts
-  const counts = visibleAttendance.reduce((acc, curr) => {
-    const s = curr.status.toLowerCase();
-    if (s === 'present') acc.present++;
-    if (s === 'absent') acc.absent++;
-    if (s === 'half day') acc.halfDay++;
-    acc.totalHours += curr.workHours || 0;
-    return acc;
-  }, { present: 0, absent: 0, halfDay: 0, totalHours: 0 });
+  if (loading || attendanceLoading || employeesLoading) return <p>Loading...</p>;
+  if (!User) return <p>User not logged in</p>;
 
   const cards = [
     { id: 1, request: 'Present', number: counts.present, icon: <IoMdCheckmarkCircleOutline /> },
@@ -92,23 +95,16 @@ const Attendance = () => {
 
   return (
     <div className="Dashboard-container leave">
+      <Pageheader header="Attendance Tracking" text="Track daily attendance and work hours" />
 
-      <Pageheader
-        header="Attendance Tracking"
-        text="Track daily attendance and work hours"
-      />
-
-      {/* ✅ Cards */}
       <div className="grid">
-        {cards.map(item => (
+        {cards.map((item) => (
           <RequestStatus key={item.id} {...item} />
         ))}
       </div>
 
-      {/* ✅ Filter */}
       <div className="card p-3 itemsCenter">
         <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-
           <button className="btn" onClick={() => setOpen(!open)}>
             <IoFunnelOutline />
             <span>{status}</span>
@@ -116,15 +112,18 @@ const Attendance = () => {
           </button>
 
           <div className="counter">
-            <span>Showing {filteredAttendance.length} of {visibleAttendance.length}</span>
+            <span>Showing {filteredAttendance.length} of {attendance.length}</span>
           </div>
 
           {open && (
             <div className="dropdown">
-              {['All Status', 'Present', 'Absent', 'Half Day'].map(stat => (
+              {['All Status', 'Present', 'Absent', 'Half Day'].map((stat) => (
                 <div
                   key={stat}
-                  onClick={() => { setStatus(stat); setOpen(false); }}
+                  onClick={() => {
+                    setStatus(stat);
+                    setOpen(false);
+                  }}
                   className={status === stat ? 'active' : ''}
                 >
                   {stat}
@@ -135,11 +134,10 @@ const Attendance = () => {
         </div>
       </div>
 
-      {/* ✅ Table */}
       <div className="card tabel">
         <div className="card-header items-center">
-          <LuCalendar className='icon-header' />
-          <h4 className='card-title'>Attendance Records</h4>
+          <LuCalendar className="icon-header" />
+          <h4 className="card-title">Attendance Records</h4>
         </div>
 
         <div className="table-wrapper">
@@ -156,50 +154,57 @@ const Attendance = () => {
             </thead>
 
             <tbody>
-              {filteredAttendance.map(item => {
-                const employee = employees.find(emp => emp.id == item.employeeId);
+  {filteredAttendance.length === 0 ? (
+    <tr>
+      <td colSpan="6" style={{ textAlign: 'center', padding: '32px', color: '#717182' }}>
+        {attendance.length === 0
+          ? isAdmin
+            ? 'No attendance records yet.'
+            : 'You have no attendance records yet.'
+          : `No ${status.toLowerCase()} records found.`}
+      </td>
+    </tr>
+  ) : (
+    filteredAttendance.map((item) => {
+      const employee = employeesById.get(String(item.employeeId));
+      const s = (item.status || '').toLowerCase().replace(' ', '-');
 
-                return (
-                  <tr key={item.id} className="table-row">
+      return (
+        <tr key={item.id} className="table-row">
+          <td className="name">
+            <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+              <span className="inital">
+                {(employee?.name || '').split(' ').filter(Boolean).map((n) => n[0]).join('')}
+              </span>
+              {employee?.name || 'Unknown'}
+            </div>
+          </td>
 
-                    <td className="name">
-                      <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                        <span className="inital">
-                          {employee?.name?.split(' ').map(n => n[0]).join('')}
-                        </span>
-                        {employee?.name || 'Unknown'}
-                      </div>
-                    </td>
+          <td className="date">{formatDate(item.date)}</td>
 
-                    <td className='date'>{formatDate(item.date)}</td>
+          <td>
+            <IoTimeOutline style={{ color: '#16a34a' }} />
+            {item.checkIn}
+          </td>
 
-                    <td>
-                      <IoTimeOutline style={{ color: '#16a34a' }} />
-                      {item.checkIn}
-                    </td>
+          <td>
+            <IoTimeOutline style={{ color: '#dc2626' }} />
+            {item.checkOut}
+          </td>
 
-                    <td>
-                      <IoTimeOutline style={{ color: '#dc2626' }} />
-                      {item.checkOut}
-                    </td>
+          <td className="hours">{calcHours(item.checkIn, item.checkOut)}h</td>
 
-                    <td className='hours'>
-                      {calcHours(item.checkIn, item.checkOut)}h
-                    </td>
-
-                    <td className={`status ${item.status.toLowerCase().replace(' ', '-')}`}>
-                     <span> {item.status}</span>
-                    </td>
-
-                  </tr>
-                );
-              })}
-            </tbody>
-
+          <td className={`status ${s}`}>
+            <span>{item.status}</span>
+          </td>
+        </tr>
+      );
+    })
+  )}
+</tbody>
           </table>
         </div>
       </div>
-
     </div>
   );
 };
