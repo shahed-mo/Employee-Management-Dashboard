@@ -334,6 +334,12 @@
   font-weight: 400;
   margin-right: 5px;
 }
+.tabel th:nth-child(3), .tabel td:nth-child(3) {
+    width: 180px;
+}
+.tabel th:nth-child(7), .tabel td:nth-child(7) {
+    width: 140px;
+}
 
 @media (min-width: 1200px) {
   .tabel table {
